@@ -4,26 +4,52 @@
     <title>Beep Player</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
     <script>
+    // 디버깅을 위한 상태 업데이트 함수
+    function updateStatus(message) {
+        document.getElementById('status').textContent = message;
+        console.log(message);  // 콘솔에도 로그 출력
+    }
+
     soundManager.setup({
         url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
+        debugMode: true,  // 디버깅 모드 활성화
         onready: function() {
+            updateStatus('SoundManager2 Ready!');
+            // 사운드 생성
             soundManager.createSound({
                 id: 'beep',
                 url: 'https://firebasestorage.googleapis.com/v0/b/livestream02-2c8kit.appspot.com/o/beep-6-96243.mp3?alt=media&token=e1e4fccb-8aef-4640-a661-944749559e8c',
                 autoLoad: true,
-                autoPlay: false
+                onload: function() {
+                    updateStatus('Sound loaded successfully!');
+                },
+                onplay: function() {
+                    updateStatus('Playing beep...');
+                },
+                onfinish: function() {
+                    updateStatus('Playback finished');
+                }
             });
+
+            // URL 파라미터 체크 및 재생
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'play') {
+                soundManager.play('beep');
+            }
+        },
+        ontimeout: function() {
+            updateStatus('SoundManager2 failed to load');
         }
     });
 
-    // URL 파라미터 체크
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('action') === 'play') {
+    // 수동 재생 함수 추가 (테스트용)
+    function playBeep() {
         soundManager.play('beep');
     }
     </script>
 </head>
 <body>
-    <div id="status">Beep Player Ready</div>
+    <div id="status">Initializing...</div>
+    <button onclick="playBeep()">Test Play</button>
 </body>
 </html>
