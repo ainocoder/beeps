@@ -1,43 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Auto Beep Player</title>
+    <title>Beep Player</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
     <script>
     soundManager.setup({
         url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
         preferFlash: false,
-        debugMode: true,
         onready: function() {
-            console.log('SoundManager ready!');
-            var sound = soundManager.createSound({
+            let sound = soundManager.createSound({
                 id: 'beep',
-                url: 'https://ainocoder.github.io/beeps/beep-6-96243.mp3',  // 전체 URL 경로 사용
+                url: './beep-6-96243.mp3',
                 autoLoad: true,
                 onload: function() {
-                    console.log('Sound loaded!');
-                    sound.play({
-                        onfinish: function() {
-                            console.log('Sound finished playing');
-                        }
-                    });
+                    // URL에 autoplay 파라미터가 있으면 재생
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.get('autoplay') === 'true') {
+                        document.body.click(); // 브라우저 정책을 우회하기 위한 가짜 클릭
+                        sound.play();
+                    }
                 }
             });
-        },
-        ontimeout: function() {
-            console.log('SoundManager failed to load!');
         }
     });
-
-    // 페이지 로드 완료 시 자동 재생 시도
-    window.onload = function() {
-        if(soundManager.ok()) {
-            soundManager.play('beep');
-        }
-    }
     </script>
 </head>
 <body>
-    <div id="status">Initializing audio...</div>
+    <div id="status">Beep Player Ready</div>
 </body>
 </html>
