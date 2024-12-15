@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Beep Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
+    <script>
+    soundManager.setup({
+        url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
+        onready: function() {
+            soundManager.createSound({
+                id: 'beep',
+                url: 'https://firebasestorage.googleapis.com/v0/b/livestream02-2c8kit.appspot.com/o/beep-6-96243.mp3?alt=media&token=e1e4fccb-8aef-4640-a661-944749559e8c',
+                autoLoad: true,
+                autoPlay: false
+            });
+        }
+    });
+
+    // URL 파라미터 체크
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'play') {
+        soundManager.play('beep');
+    }
+    </script>
+</head>
+<body>
+    <div id="status">Beep Player Ready</div>
+</body>
+</html>
