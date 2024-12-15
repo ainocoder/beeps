@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Beep Player</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
-    <script>
-    soundManager.setup({
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
-        onready: function() {
-            // 사운드 생성과 동시에 자동 재생
-            soundManager.createSound({
-                id: 'beep',
-                url: 'https://soundcloud.com/ilqiibkwxryy/beep-6-96243?si=0fd1202a96bb424e9a6f4653994bbeb8&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing',
-                autoLoad: true,
-                onload: function() {
-                    // 파일이 로드되면 자동으로 재생
-                    soundManager.play('beep');
-                }
-            });
-        }
-    });
-    </script>
+   <title>Auto Beep Player</title>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
+   <script>
+   let played = false;
+
+   soundManager.setup({
+       url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
+       onready: function() {
+           document.getElementById('status').textContent = 'Sound Manager Ready';
+           
+           soundManager.createSound({
+               id: 'beep',
+               url: './beep-6-96243.mp3',  // 업로드한 파일명으로 수정
+               autoLoad: true,
+               onload: function() {
+                   if (!played) {
+                       soundManager.play('beep');
+                       played = true;
+                       document.getElementById('status').textContent = 'Playing beep...';
+                   }
+               }
+           });
+       },
+       ontimeout: function() {
+           document.getElementById('status').textContent = 'Failed to load SoundManager';
+       }
+   });
+   </script>
 </head>
 <body>
-    <div id="status">Auto Playing Beep...</div>
+   <div id="status">Loading...</div>
 </body>
 </html>
