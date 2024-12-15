@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <title>Auto Beep Player</title>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
-   <script>
-   let played = false;
+    <title>Auto Beep Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/script/soundmanager2.js"></script>
+    <script>
+    soundManager.setup({
+        url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
+        preferFlash: false,
+        debugMode: true,
+        onready: function() {
+            console.log('SoundManager ready!');
+            var sound = soundManager.createSound({
+                id: 'beep',
+                url: 'https://ainocoder.github.io/beeps/beep-6-96243.mp3',  // 전체 URL 경로 사용
+                autoLoad: true,
+                onload: function() {
+                    console.log('Sound loaded!');
+                    sound.play({
+                        onfinish: function() {
+                            console.log('Sound finished playing');
+                        }
+                    });
+                }
+            });
+        },
+        ontimeout: function() {
+            console.log('SoundManager failed to load!');
+        }
+    });
 
-   soundManager.setup({
-       url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
-       onready: function() {
-           document.getElementById('status').textContent = 'Sound Manager Ready';
-           
-           soundManager.createSound({
-               id: 'beep',
-               url: './beep-6-96243.mp3',  // 업로드한 파일명으로 수정
-               autoLoad: true,
-               onload: function() {
-                   if (!played) {
-                       soundManager.play('beep');
-                       played = true;
-                       document.getElementById('status').textContent = 'Playing beep...';
-                   }
-               }
-           });
-       },
-       ontimeout: function() {
-           document.getElementById('status').textContent = 'Failed to load SoundManager';
-       }
-   });
-   </script>
+    // 페이지 로드 완료 시 자동 재생 시도
+    window.onload = function() {
+        if(soundManager.ok()) {
+            soundManager.play('beep');
+        }
+    }
+    </script>
 </head>
 <body>
-   <div id="status">Loading...</div>
+    <div id="status">Initializing audio...</div>
 </body>
 </html>
