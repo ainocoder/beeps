@@ -7,23 +7,21 @@
     soundManager.setup({
         url: 'https://cdnjs.cloudflare.com/ajax/libs/soundmanager2/2.97a.20170601/swf/',
         onready: function() {
+            // 사운드 생성과 동시에 자동 재생
             soundManager.createSound({
                 id: 'beep',
                 url: 'https://drive.google.com/file/d/1AIr6mpsYvTuYvagYbBDtrFNezNf22tLb/view?usp=drive_link',
                 autoLoad: true,
-                autoPlay: false
+                onload: function() {
+                    // 파일이 로드되면 자동으로 재생
+                    soundManager.play('beep');
+                }
             });
         }
     });
-
-    // URL 파라미터 체크
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('action') === 'play') {
-        soundManager.play('beep');
-    }
     </script>
 </head>
 <body>
-    <div id="status">Beep Player Ready</div>
+    <div id="status">Auto Playing Beep...</div>
 </body>
 </html>
